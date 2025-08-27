@@ -1,5 +1,6 @@
 package com.notepad.restImpl;
 
+import com.notepad.dto.AuthRequest;
 import com.notepad.entity.UserInfo;
 import com.notepad.rest.UserInfoRest;
 import com.notepad.service.UserInfoService;
@@ -29,6 +30,19 @@ public class UserInfoRestImpl implements UserInfoRest {
             return userInfoService.addNewAppUser(userInfo);
         } catch (Exception e) {
             log.error("Exception in addNewUser: {}", e);
+            map.put("message", "Something Went Wrong.");
+        }
+        //return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+        //or
+        return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> login(AuthRequest authRequest) {
+        try {
+            return userInfoService.login(authRequest);
+        } catch (Exception e) {
+            log.error("Exception in login : {}", e);
             map.put("message", "Something Went Wrong.");
         }
         //return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
