@@ -49,4 +49,30 @@ public class UserInfoRestImpl implements UserInfoRest {
         //or
         return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<?> getAllAppUser() {
+        try {
+            return userInfoService.getAllAppUser();
+        } catch (Exception e) {
+            log.error("Exception in finding all app user. : {}", e);
+            map.put("message", "Something Went Wrong.");
+        }
+        //return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+        //or
+        return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> updateUserStatus(UserInfo userInfo) {
+        try {
+            return userInfoService.updateUserStatus(userInfo);
+        } catch (Exception e) {
+            log.error("Exception in update user status: {}", e);
+            map.put("message", "Something Went Wrong.");
+        }
+        //return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+        //or
+        return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

@@ -22,10 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
@@ -60,7 +57,7 @@ public class UserInfoServiceImpl implements UserInfoService {
                 return new ResponseEntity<>("{\"message\":\"User Already Exist.\"}", HttpStatus.FOUND);
             }
             userInfo.setPassword(passwordEncoder.encode(userInfo.getPassword()));
-            userInfo.setIsDeletable("false");
+            userInfo.setIsDeletable("true");
             userInfo.setStatus("false");
             userInfo.setEmail(userInfo.getEmail().toLowerCase());
             userInfoRepository.save(userInfo);
@@ -101,6 +98,51 @@ public class UserInfoServiceImpl implements UserInfoService {
             return new ResponseEntity<>("{\"message\":\"Invalid Credentials.\"}", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             log.error("Exception in login : {}", e);
+            map.put("message", "Something Went Wrong.");
+        }
+        //return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+        //or
+        return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> getAllAppUser() {
+        try {
+            List<UserInfo> userInfoList = userInfoRepository.getAllAppUser(jwtAuthFilter.getEmail());
+            if(userInfoList!=null && userInfoList.size()>0){
+                return new ResponseEntity<>(userInfoList, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>("{\"message\":\"No Data.\"}", HttpStatus.OK);
+            }
+        }catch (Exception e){
+            log.error("Exception in login : {}", e.getMessage());
+        }
+        return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> updateUserStatus(UserInfo userInfo) {
+        try {
+            if(!Objects.isNull(userInfo) && !Objects.isNull(userInfo.getId())
+                    && !Objects.isNull(userInfo.getStatus())){
+                Optional<UserInfo> dbUser = userInfoRepository.findById(userInfo.getId());
+                if(!dbUser.isPresent()){
+                    return new ResponseEntity<>("{\"message\":\"User Not Present.\"}", HttpStatus.BAD_REQUEST);
+                }else{
+                    UserInfo userInfo1 = dbUser.get();
+                    if(!userInfo1.getIsDeletable().equalsIgnoreCase("true")){
+                        return new ResponseEntity<>("{\"message\":\"User is not deletable.\"}", HttpStatus.BAD_REQUEST);
+                    }else{
+                        userInfo1.setStatus(userInfo.getStatus());
+                        userInfoRepository.save(userInfo1);
+                        return new ResponseEntity<>("{\"message\":\"User Update Successful.\"}", HttpStatus.OK);
+                    }
+                }
+            }else{
+                return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            log.error("Exception in addNewUser: {}", e.getMessage());
             map.put("message", "Something Went Wrong.");
         }
         //return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);

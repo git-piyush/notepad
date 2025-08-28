@@ -3,9 +3,7 @@ package com.notepad.rest;
 import com.notepad.dto.AuthRequest;
 import com.notepad.entity.UserInfo;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(path = "/appuser")
 public interface UserInfoRest {
@@ -15,4 +13,10 @@ public interface UserInfoRest {
 
     @PostMapping(path="/login")
     ResponseEntity<?> login(@RequestBody(required = true)AuthRequest authRequest);
+
+    @GetMapping(path="/getAllAppUser")
+    ResponseEntity<?> getAllAppUser();
+
+    @PostMapping(path="/updateUserStatus")
+    ResponseEntity<?> updateUserStatus(@RequestBody(required = true) UserInfo userInfo);
 }
