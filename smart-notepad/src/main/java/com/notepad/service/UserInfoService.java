@@ -14,4 +14,8 @@ public interface UserInfoService {
     ResponseEntity<?> getAllAppUser();
 
     ResponseEntity<?> updateUserStatus(UserInfo userInfo);
+
+    ResponseEntity<?> checkToken();
+
+    ResponseEntity<?> updateUser(UserInfo userInfo);
 }

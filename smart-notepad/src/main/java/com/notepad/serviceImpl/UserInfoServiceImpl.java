@@ -142,7 +142,46 @@ public class UserInfoServiceImpl implements UserInfoService {
                 return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            log.error("Exception in addNewUser: {}", e.getMessage());
+            log.error("Exception in update user: {}", e.getMessage());
+            map.put("message", "Something Went Wrong.");
+        }
+        //return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+        //or
+        return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> checkToken() {
+        //we will develop this api when we need to validate that token send from ui is expired or not
+        return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> updateUser(UserInfo userInfo) {
+        try {
+            if(!Objects.isNull(userInfo) && !Objects.isNull(userInfo.getId())){
+                Optional<UserInfo> dbUserOp = userInfoRepository.findById(userInfo.getId());
+                if(dbUserOp.isPresent()){
+                    Optional<UserInfo> user = userInfoRepository.findByEmail(userInfo.getEmail());
+                    if(user.isPresent()){
+                        return new ResponseEntity<>("{\"message\":\"User Already Exist.\"}", HttpStatus.FOUND);
+                    }
+                    UserInfo dbUser = dbUserOp.get();
+                    //update the user
+                    if(userInfo.getEmail()!=null && !userInfo.getEmail().trim().isEmpty()){
+                        dbUser.setEmail(userInfo.getEmail());
+                    }
+                    if(userInfo.getName()!=null && !userInfo.getName().trim().isEmpty()){
+                        dbUser.setName(userInfo.getName());
+                    }
+                    userInfoRepository.save(dbUser);
+                    return new ResponseEntity<>("{\"message\":\"User has been updated successfully.\"}", HttpStatus.OK);
+                }else{
+                    return new ResponseEntity<>("{\"message\":\"User Not present.\"}", HttpStatus.BAD_REQUEST);
+                }
+            }
+        } catch (Exception e) {
+            log.error("Exception in addNewUser: {}", e);
             map.put("message", "Something Went Wrong.");
         }
         //return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);

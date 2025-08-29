@@ -75,4 +75,29 @@ public class UserInfoRestImpl implements UserInfoRest {
         //or
         return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @Override
+    public ResponseEntity<?> checkToken() {
+        try {
+            return userInfoService.checkToken();
+        } catch (Exception e) {
+            log.error("Exception in check token: {}", e.getMessage());
+            map.put("message", "Something Went Wrong.");
+        }
+        //return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+        //or
+        return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> updateUser(UserInfo userInfo) {
+        try {
+            return userInfoService.updateUser(userInfo);
+        } catch (Exception e) {
+            log.error("Exception in updateUser: {}", e.getMessage());
+            map.put("message", "Something Went Wrong.");
+        }
+        //return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+        //or
+        return new ResponseEntity<>(map, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

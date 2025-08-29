@@ -19,4 +19,11 @@ public interface UserInfoRest {
 
     @PostMapping(path="/updateUserStatus")
     ResponseEntity<?> updateUserStatus(@RequestBody(required = true) UserInfo userInfo);
+
+    @GetMapping(path="/checkToken")
+    ResponseEntity<?> checkToken();
+
+    @PostMapping(path = "/updateUser")
+    ResponseEntity<?> updateUser(@RequestBody(required = true) UserInfo userInfo);
+
 }
