@@ -16,10 +16,16 @@ public class UserInfo implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
+    @Column(unique = true)
     private String email;
+
     private String password;
+
     private String isDeletable;
+
     private String status;
 
     public UserInfo(String status, Long id, String name, String email) {
