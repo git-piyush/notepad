@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -37,6 +38,21 @@ public class CategoryServiceImpl implements CategoryService {
             return new ResponseEntity<>("{\"message\":\"Category Added.\"}", HttpStatus.OK);
         } catch (Exception e) {
             log.error("Exception in addNewCategory: {}", e.getMessage());
+        }
+        return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> getAllCategory() {
+        try {
+            List<Category> categoryList = categotyRepository.findAll();
+            if(categoryList!=null && categoryList.size()>0){
+                return new ResponseEntity<>(categoryList, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>("{\"message\":\"No Data.\"}", HttpStatus.OK);
+            }
+        }catch (Exception e){
+            log.error("Exception in getAllCategory : {}", e.getMessage());
         }
         return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -28,4 +28,14 @@ public class CategoryRestImpl implements CategoryRest {
         }
         return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<?> getAllCategory() {
+        try {
+            return categoryService.getAllCategory();
+        } catch (Exception e) {
+            log.error("Exception in finding all category. : {}", e.getMessage());
+        }
+        return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
