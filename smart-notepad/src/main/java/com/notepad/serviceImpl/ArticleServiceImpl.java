@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -39,6 +40,21 @@ public class ArticleServiceImpl implements ArticleService {
                 }else{
                     return new ResponseEntity<>("{\"message\":\"Invalid value for ("+article.getId()+")\"}", HttpStatus.BAD_REQUEST);
                 }
+        } catch (Exception e) {
+            log.error("Exception in addNewCategory: {}", e.getMessage());
+        }
+        return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> getAllArticle() {
+        try{
+            List<Article> articleList = articleRepository.findAll();
+            if(!Objects.isNull(articleList) && articleList.size()>0){
+                return new ResponseEntity<>(articleList, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>("{\"message\":\"No Data.\"}", HttpStatus.NO_CONTENT);
+            }
         } catch (Exception e) {
             log.error("Exception in addNewCategory: {}", e.getMessage());
         }

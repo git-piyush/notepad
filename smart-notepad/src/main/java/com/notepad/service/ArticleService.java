@@ -7,4 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ArticleService {
     ResponseEntity<?> addNewArticle(Article article);
+
+    ResponseEntity<?> getAllArticle();
 }
