@@ -68,7 +68,7 @@ public class UserInfoRestImpl implements UserInfoRest {
         try {
             return userInfoService.updateUserStatus(userInfo);
         } catch (Exception e) {
-            log.error("Exception in update user status: {}", e);
+            log.error("Exception in update user status: {}", e.getMessage());
             map.put("message", "Something Went Wrong.");
         }
         //return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);

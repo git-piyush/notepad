@@ -38,4 +38,14 @@ public class CategoryRestImpl implements CategoryRest {
         }
         return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<?> updateCategory(Category category) {
+        try {
+            return categoryService.updateCategory(category);
+        } catch (Exception e) {
+            log.error("Exception in updateCategory: {}", e.getMessage());
+        }
+        return new ResponseEntity<>("{\"message\":\"Something went wrong\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

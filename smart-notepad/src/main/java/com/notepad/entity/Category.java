@@ -10,8 +10,8 @@ import java.io.Serializable;
 @Entity
 @Table(name="tbl_category")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@AllArgsConstructor
+//@NoArgsConstructor
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1l;
@@ -22,4 +22,16 @@ public class Category implements Serializable {
 
     @Column(unique = true)
     private String name;
+
+    public Category() {
+    }
+
+    public Category(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Category(Long id) {
+        this.id = id;
+    }
 }

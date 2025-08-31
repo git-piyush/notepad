@@ -57,6 +57,33 @@ public class CategoryServiceImpl implements CategoryService {
         return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @Override
+    public ResponseEntity<?> updateCategory(Category category) {
+        try {
+            if(!Objects.isNull(category) && !Objects.isNull(category.getId())
+                    && !Objects.isNull(category.getName())){
+                Optional<Category> existingCategory = categotyRepository.findById(category.getId());
+                if(!existingCategory.isPresent()){
+                    return new ResponseEntity<>("{\"message\":\"Category Not Present.\"}", HttpStatus.BAD_REQUEST);
+                }else{
+                        Boolean cat = categotyRepository.existsByNameIgnoreCase(category.getName());
+                        if(cat){
+                            return new ResponseEntity<>("{\"message\":\"Category with name (" + category.getName()+ ") already exist.\"}", HttpStatus.CONFLICT);
+                        }
+                        Category category1 = existingCategory.get();
+                        category1.setName(category.getName());
+                        categotyRepository.save(category1);
+                        return new ResponseEntity<>("{\"message\":\"Category Update Successful.\"}", HttpStatus.OK);
+                }
+            }else{
+                return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            log.error("Exception in update user: {}", e.getMessage());
+        }
+        return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     private boolean validateCategory(Category category) {
         return !Objects.isNull(category) && StringUtils.hasText(category.getName());
     }
