@@ -51,7 +51,30 @@ public class ArticleServiceImpl implements ArticleService {
         try{
             List<Article> articleList = articleRepository.findAll();
             if(!Objects.isNull(articleList) && articleList.size()>0){
+                for(int i=0;i<articleList.size();i++){
+                    articleList.get(i).setCategoryId(articleList.get(i).getCategory().getId());
+                    articleList.get(i).setCategoryName(articleList.get(i).getCategory().getName());
+                }
                 return new ResponseEntity<>(articleList, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>("{\"message\":\"No Data.\"}", HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            log.error("Exception in addNewCategory: {}", e.getMessage());
+        }
+        return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> getAllPublishedArticle() {
+        try{
+            List<Article> publishedArticleList = articleRepository.getAllPublishedArticle("Published");
+            if(!Objects.isNull(publishedArticleList) && publishedArticleList.size()>0){
+                for(int i=0;i<publishedArticleList.size();i++){
+                    publishedArticleList.get(i).setCategoryId(publishedArticleList.get(i).getCategory().getId());
+                    publishedArticleList.get(i).setCategoryName(publishedArticleList.get(i).getCategory().getName());
+                }
+                return new ResponseEntity<>(publishedArticleList, HttpStatus.OK);
             }else{
                 return new ResponseEntity<>("{\"message\":\"No Data.\"}", HttpStatus.NO_CONTENT);
             }

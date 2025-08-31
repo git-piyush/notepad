@@ -28,4 +28,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query("DELETE from Article a WHERE a.id =:id" )
     Integer deleteArticle(@Param("id") Integer id);
 
+    @Modifying
+    @Transactional
+    @Query("SELECT a FROM Article a WHERE a.status =:published")
+    List<Article> getAllPublishedArticle(String published);
 }

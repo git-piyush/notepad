@@ -16,4 +16,7 @@ public interface ArticleRest {
     @GetMapping(path = "/getAllArticle")
     ResponseEntity<?> getAllArticle();
 
+    @GetMapping(path = "/getAllPublishedArticle")
+    ResponseEntity<?> getAllPublishedArticle();
+
 }

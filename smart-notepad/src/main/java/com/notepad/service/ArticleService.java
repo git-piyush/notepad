@@ -9,4 +9,6 @@ public interface ArticleService {
     ResponseEntity<?> addNewArticle(Article article);
 
     ResponseEntity<?> getAllArticle();
+
+    ResponseEntity<?> getAllPublishedArticle();
 }
