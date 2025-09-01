@@ -13,4 +13,6 @@ public interface ArticleService {
     ResponseEntity<?> getAllPublishedArticle();
 
     ResponseEntity<?> updateArticle(Article article);
+
+    ResponseEntity<?> deleteArticle(Long id);
 }

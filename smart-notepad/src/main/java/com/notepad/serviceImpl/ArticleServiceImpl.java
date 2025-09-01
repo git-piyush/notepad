@@ -112,7 +112,23 @@ public class ArticleServiceImpl implements ArticleService {
                 return new ResponseEntity<>("{\"message\":\"Required Article Id to update article.\"}", HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            log.error("Exception in addNewCategory: {}", e.getMessage());
+            log.error("Exception in updateArticle: {}", e.getMessage());
+        }
+        return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<?> deleteArticle(Long id) {
+        try{
+            Optional<Article> opDbArticle = articleRepository.findById(id);
+            if(!opDbArticle.isPresent()){
+                return new ResponseEntity<>("{\"message\":\"Article not present with article id:  ("+id+")\"}", HttpStatus.BAD_REQUEST);
+            }
+            articleRepository.deleteById(id);
+            return new ResponseEntity<>("{\"message\":\"Article deleted successfully.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+
+        } catch (Exception e) {
+            log.error("Exception in deleteArticle: {}", e.getMessage());
         }
         return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
     }
