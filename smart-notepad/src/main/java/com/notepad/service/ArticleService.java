@@ -11,4 +11,6 @@ public interface ArticleService {
     ResponseEntity<?> getAllArticle();
 
     ResponseEntity<?> getAllPublishedArticle();
+
+    ResponseEntity<?> updateArticle(Article article);
 }

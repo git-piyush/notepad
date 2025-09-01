@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -32,7 +33,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ResponseEntity<?> addNewArticle(Article article) {
         try {
-                if(!Objects.isNull(article)){
+                if(!Objects.isNull(article) && validateArticle(article)){
                     article.setPublication_date(new Date());
                     article.setCategory(categotyRepository.findById(article.getCategoryId()).get());
                     articleRepository.save(article);
@@ -84,7 +85,40 @@ public class ArticleServiceImpl implements ArticleService {
         return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @Override
+    public ResponseEntity<?> updateArticle(Article article) {
+        //To Do
+        try {
+            if(!Objects.isNull(article) && article.getId() !=null){
+
+                Optional<Article> opDbArticle = articleRepository.findById(article.getId());
+                if(!opDbArticle.isPresent()){
+                    return new ResponseEntity<>("{\"message\":\"Article not present with article id:  ("+article.getId()+")\"}", HttpStatus.BAD_REQUEST);
+                }
+                Article dbArticle = opDbArticle.get();
+                if(article.getTitle()!=null && article.getTitle().trim().length()>0){
+                    dbArticle.setTitle(article.getTitle());
+                }
+                if(article.getContent()!=null && article.getContent().trim().length()>0){
+                    dbArticle.setContent(article.getContent());
+                }
+                if(article.getStatus()!=null && article.getStatus().trim().length()>0){
+                    dbArticle.setStatus(article.getStatus());
+                }
+                dbArticle.setPublication_date(new Date());
+                articleRepository.save(dbArticle);
+                return new ResponseEntity<>("{\"message\":\"Article updated successfully\"}", HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>("{\"message\":\"Required Article Id to update article.\"}", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            log.error("Exception in addNewCategory: {}", e.getMessage());
+        }
+        return new ResponseEntity<>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     private boolean validateArticle(Article article) {
-        return !Objects.isNull(article) && StringUtils.hasText(article.getTitle());
+        return !Objects.isNull(article) && StringUtils.hasText(article.getTitle())
+                && StringUtils.hasText(article.getContent()) && StringUtils.hasText(String.valueOf(article.getCategoryId()));
     }
 }

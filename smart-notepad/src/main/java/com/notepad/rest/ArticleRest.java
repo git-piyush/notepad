@@ -19,4 +19,7 @@ public interface ArticleRest {
     @GetMapping(path = "/getAllPublishedArticle")
     ResponseEntity<?> getAllPublishedArticle();
 
+    @PostMapping(path="/updateArticle")
+    ResponseEntity<?> updateArticle(@RequestBody(required = true) Article article);
+
 }
